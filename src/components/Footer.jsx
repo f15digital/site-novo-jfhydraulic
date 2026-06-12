@@ -154,7 +154,25 @@ const Footer = () => {
             © {new Date().getFullYear()} JF Hydraulic. Todos os direitos reservados.
           </p>
           <p className="text-gray-600 text-xs">
-            Desenvolvido com dedicação para caminhoneiros brasileiros.
+            <a
+              href="https://f15digital.com.br"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="F15 Digital - Agência de Marketing Digital em Campinas"
+              className="hover:text-[#FFD700] transition-colors"
+            >
+              F15 Digital
+            </a>
+            {' — '}
+            <a
+              href="https://f15digital.com.br"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Agência de Marketing Digital em Campinas"
+              className="hover:text-[#FFD700] transition-colors"
+            >
+              Agência de Marketing Digital em Campinas
+            </a>
           </p>
         </div>
       </div>

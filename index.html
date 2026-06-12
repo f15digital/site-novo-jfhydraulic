@@ -25,5 +25,48 @@
 		<!-- End Google Tag Manager (noscript) -->
 		<div id="root"></div>
 		<script type="module" src="/src/main.jsx"></script>
+<!-- Gera Cliente: rastreamento de origem de leads -->
+<script>
+(function () {
+  var API = "https://unmixovbnmnbnrxiocsu.supabase.co/functions/v1/utm-protocol";
+  var SLUG = "jfhydraulic";
+  var KEYS = ["utm_source","utm_medium","utm_campaign","utm_content","utm_term","fbclid","gclid"];
+  var STORE = "gc_track";
+  try {
+    var p = new URLSearchParams(location.search);
+    var hasAny = KEYS.some(function (k) { return p.get(k); });
+    if (hasAny || !sessionStorage.getItem(STORE)) {
+      var data = {};
+      KEYS.forEach(function (k) { var v = p.get(k); if (v) data[k] = v; });
+      data.landing_page = location.href;
+      data.referrer = document.referrer || "";
+      sessionStorage.setItem(STORE, JSON.stringify(data));
+    }
+  } catch (e) {}
+  function isWaLink(a) {
+    return a && a.href && (a.href.indexOf("wa.me") > -1 || a.href.indexOf("api.whatsapp.com") > -1);
+  }
+  document.addEventListener("click", function (ev) {
+    var a = ev.target && ev.target.closest ? ev.target.closest("a") : null;
+    if (!isWaLink(a)) return;
+    ev.preventDefault();
+    var fallback = a.href;
+    var done = false;
+    function go(url) { if (done) return; done = true; window.location.href = url; }
+    var timer = setTimeout(function () { go(fallback); }, 1500);
+    var payload = {};
+    try { payload = JSON.parse(sessionStorage.getItem(STORE) || "{}"); } catch (e) {}
+    payload.slug = SLUG;
+    if (!payload.landing_page) payload.landing_page = location.href;
+    fetch(API, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    }).then(function (r) { return r.json(); })
+      .then(function (j) { clearTimeout(timer); go(j && j.wa_link ? j.wa_link : fallback); })
+      .catch(function () { clearTimeout(timer); go(fallback); });
+  }, true);
+})();
+</script>
 	</body>
 </html>
