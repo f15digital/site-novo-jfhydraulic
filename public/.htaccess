@@ -1,5 +1,8 @@
 <IfModule mod_rewrite.c>
   RewriteEngine On
+# Redirect 302 do subdominio link.jfhydraulic.com.br para a Edge Function do Supabase (preserva query string)
+RewriteCond %{HTTP_HOST} ^link\.jfhydraulic\.com\.br$ [NC]
+RewriteRule ^ https://unmixovbnmnbnrxiocsu.supabase.co/functions/v1/utm-protocol [R=302,L,QSA]
   RewriteBase /
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
